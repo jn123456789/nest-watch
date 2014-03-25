@@ -1,0 +1,14 @@
+{
+  "name": "nest-watch",
+  "version": "0.0.0",
+  "description": "keeping watch",
+  "scripts": {
+  },
+  "author": "Jan Nelson & Emily Ford",
+  "license": "MIT",
+  "dependencies": {
+    "unofficial-nest-api": "~0.1"
+  },
+  "devDependencies": {
+  }
+}
