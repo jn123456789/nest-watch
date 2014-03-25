@@ -17,6 +17,7 @@ nest.login(username, password, function (err, data) {
   }
 
   nest.fetchStatus(function (data) {
+    data['timestamp'] = (new Date()).getTime();
     console.log(JSON.stringify(data));
   });
 });
