@@ -34,6 +34,11 @@ mongoClient.connect("mongodb://localhost:27017/nest-watch", function(err, db) {
       line = line.replace(/\$timestamp/g, '__timestamp__');
       line = line.replace(/\$version/g, '__version__');
       var data = JSON.parse(line);
+
+      // temporary measure for initial import: prune the sample rate down from once
+      // per minute to once per ten minutes.
+      if (new Date(data.timestamp).getMinutes() % 10 != 0) return;
+
       pendingInsertCount++;
       collection.insert(data, function(err, result) {
         if (err) { throw new NestWatchException(err); }
@@ -46,11 +51,9 @@ mongoClient.connect("mongodb://localhost:27017/nest-watch", function(err, db) {
 
     reader.on('close', function() {
       pendingInput = 0;
+      if (pendingInsertCount == 0) {
+        db.close();
+      }
     });
   });
 });
-
-
-//var stream = collection.find().stream();
-//stream.on("data", function(item) { });
-//stream.on("end", function() { });
