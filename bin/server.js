@@ -25,7 +25,8 @@ mongoClient.connect("mongodb://localhost:27017/nest-watch", function(err, db) {
         '<body>' +
         '<table border="1" cellspacing="0" cellpadding="5">' +
         '<tr>' +
-        '<th>Sample Time</th>' +
+        '<th>Sample Requested At</th>' +
+        '<th>Sample Recorded At</th>' +
         '<th>Target Temperature</th>' +
         '<th>Actual Temperature</th>' +
         '</tr>';
@@ -38,8 +39,12 @@ mongoClient.connect("mongodb://localhost:27017/nest-watch", function(err, db) {
       var sampleTime = new Date(sample.timestamp);
       var formattedSampleTime = sampleTime.toString();
 
+      var deviceTime = new Date(device.__timestamp__);
+      var formattedDeviceTime = deviceTime.toString();
+
       responseBuffer += '<tr>' +
         '<td>'+formattedSampleTime+'</td>' +
+        '<td>'+formattedDeviceTime+'</td>' +
         '<td>'+nest.ctof(device.target_temperature)+' F</td>' +
         '<td>'+nest.ctof(device.current_temperature)+' F</td>' +
         '</tr>';
@@ -53,6 +58,8 @@ mongoClient.connect("mongodb://localhost:27017/nest-watch", function(err, db) {
     });
   });
 
-  app.listen(4000);
+  var port = process.env.PORT || 4000;
+  app.listen(port);
+  console.log("listening on port " + port);
 });
 
